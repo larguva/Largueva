@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Landing Page - Largueva</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0; padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #1e1e1e; /* mirip background ChatGPT */
+      color: #fff;
+      text-align: center;
+    }
+    .container {
+      max-width: 400px;
+      width: 90%;
+    }
+    .btn {
+      display: block;
+      width: 100%;
+      margin: 15px 0;
+      padding: 15px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: #fff;
+      font-weight: bold;
+    }
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+    }
+    .hukuman { background: #e74c3c; }   /* merah elegan */
+    .alquran { background: #2ecc71; }   /* hijau lembut */
+    .sawit   { background: #f39c12; }   /* oranye keemasan */
+  </style>
+</head>
+<body>
+  <div class="container">
+    <button class="btn hukuman" onclick="location.href='hukuman.html'">Hukuman</button>
+    <button class="btn alquran" onclick="location.href='alquran.html'">Catatan Alquran</button>
+    <button class="btn sawit" onclick="location.href='sawit.html'">Manen Sawit</button>
+  </div>
+</body>
+</html>
