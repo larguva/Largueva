@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Catatan Membaca Alquran</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    h2 {
+      text-align: center;
+      font-weight: bold;
+      color: #2c3e50;
+      margin-bottom: 20px;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+      color: #34495e;
+    }
+    select, input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      margin-top: 15px;
+      background: #27ae60;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #219150;
+    }
+    .result {
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      white-space: pre-line;
+      margin-top: 15px;
+    }
+    .copy-btn {
+      background: #2980b9;
+      margin-top: 10px;
+    }
+    .copy-btn:hover {
+      background: #1f6694;
+    }
+  </style>
+</head>
+<body>
+  <h2>Catatan Membaca Alquran</h2>
+  
+  <div class="card">
+    <label for="surah">Nama Surah</label>
+    <select id="surah">
+      <option value="">-- Pilih Surah --</option>
+      <option>Al-Fatihah</option>
+      <option>Al-Baqarah</option>
+      <option>Aali Imran</option>
+      <option>An-Nisa</option>
+      <option>Al-Maidah</option>
+      <option>Al-An'am</option>
+      <option>Al-A'raf</option>
+      <option>Al-Anfal</option>
+      <option>At-Taubah</option>
+      <option>Yunus</option>
+      <option>Hud</option>
+      <option>Yusuf</option>
+      <option>Ar-Ra'd</option>
+      <option>Ibrahim</option>
+      <option>Al-Hijr</option>
+      <option>An-Nahl</option>
+      <option>Al-Isra</option>
+      <option>Al-Kahf</option>
+      <option>Maryam</option>
+      <option>Ta-Ha</option>
+    </select>
+    
+    <label for="ayat">Ayat</label>
+    <input type="number" id="ayat" placeholder="Contoh: 1-5">
+    
+    <label for="agenda">Agenda : </label>
+    <select id="agenda">
+      <option value="">-- Pilih Agenda --</option>
+ 
+      <option>Kajian</option>
+      <option>Kelompok</option>
+    </select>
+    
+    <button onclick="simpan()">Simpan</button>
+  </div>
+  
+  <div id="output" class="result" style="display:none;"></div>
+  <button class="copy-btn" id="copyBtn" style="display:none;" onclick="copyText()">Copy</button>
+  
+  <script>
+    function simpan() {
+      const surah = document.getElementById("surah").value;
+      const ayat = document.getElementById("ayat").value;
+      const agenda = document.getElementById("agenda").value;
+      const tanggal = new Date().toLocaleDateString('id-ID', { 
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+      });
+
+      if (!surah || !ayat || !agenda) {
+        alert("Lengkapi semua data terlebih dahulu.");
+        return;
+      }
+
+      const hasil = 
+`📖 *Catatan Membaca Alquran*
+ _${tanggal}_
+
+• *Surah* : ${surah}
+• *Ayat* : ${ayat}
+• *Agenda* : ${agenda}`;
+
+      document.getElementById("output").innerText = hasil;
+      document.getElementById("output").style.display = "block";
+      document.getElementById("copyBtn").style.display = "inline-block";
+    }
+
+    function copyText() {
+      const text = document.getElementById("output").innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Teks berhasil disalin, siap ditempel di WhatsApp!");
+      });
+    }
+  </script>
+</body>
+</html>
