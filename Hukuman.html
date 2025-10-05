@@ -1,110 +1,206 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Disiplin Aplikasi</title>
+  <meta charset="UTF-8" />
+  <title>Disiplin Aplikasi (Punish & Reward)</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; text-align: center; background: #f7f7f7; }
-    h2 { margin-bottom: 15px; }
-    button { margin: 5px; padding: 10px 20px; font-size: 15px; border: none; border-radius: 8px; cursor: pointer; background: #4a90e2; color: white; }
-    button:hover { background: #357ABD; }
-    .card {
-      background: white; border-radius: 12px; padding: 20px; margin-top: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: none;
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      text-align: center;
+      background: #f7f7f7;
     }
-    .app-icon { font-size: 50px; margin-bottom: 10px; }
-    .sisa-waktu { font-size: 28px; font-weight: bold; margin: 10px 0; }
-    .input-box { margin-top: 15px; font-size: 14px; }
-    input { width: 60px; padding: 5px; margin: 5px; text-align: center; border: 1px solid #ccc; border-radius: 6px; }
-    .log { margin-top: 30px; text-align: left; }
-    .log h3 { font-size: 16px; }
-    .log ul { padding-left: 20px; font-size: 14px; }
+    h2 { margin-bottom: 8px; }
+    button {
+      margin: 6px;
+      padding: 10px 18px;
+      font-size: 15px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #4a90e2;
+      color: white;
+      transition: 0.3s;
+    }
+    button:hover { background: #357ABD; }
+    #rewardBtn {
+      background: #4CAF50;
+    }
+    #rewardBtn:hover {
+      background: #3e8e41;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      display: none;
+    }
+    .app-icon {
+      font-size: 60px;
+      margin-bottom: 5px;
+    }
+    .app-name {
+      font-size: 18px;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+    input {
+      width: 64px;
+      padding: 6px;
+      margin: 6px;
+      text-align: center;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+    }
+    input[type="submit"] {
+      padding: 6px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #333;
+      color: #fff;
+      border: none;
+    }
+    .sisa-waktu {
+      font-size: 26px;
+      font-weight: 700;
+      margin: 8px 0;
+      color: #c0392b;
+    }
+    .fade {
+      animation: fade 0.3s ease;
+    }
+    @keyframes fade {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    #log {
+      background: white;
+      border-radius: 12px;
+      margin-top: 25px;
+      padding: 10px;
+      width: 80%;
+      max-width: 420px;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: 0 0 6px rgba(0,0,0,0.1);
+      text-align: left;
+      font-size: 14px;
+    }
+    .log-entry {
+      border-bottom: 1px solid #eee;
+      padding: 5px 0;
+    }
   </style>
 </head>
 <body>
   <h2>Disiplin Waktu Aplikasi</h2>
-  <p>Pilih hukuman (point):</p>
-  <button onclick="pickApp(-25)">5 Point (-25m)</button>
-  <button onclick="pickApp(-15)">3 Point (-15m)</button>
-  <button onclick="pickApp(-10)">1 Point (-10m)</button>
 
-  <div class="card" id="appCard">
-    <div class="app-icon">📱</div>
-    <h3 id="pickedApp"></h3>
-    <div class="sisa-waktu" id="result">Sisa waktu: -</div>
+  <div>
+    <button onclick="setPunish(25)">Punish 25m</button>
+    <button onclick="setPunish(15)">Punish 15m</button>
+    <button onclick="setPunish(10)">Punish 10m</button>
+    <button id="rewardBtn" onclick="setReward(25)">Reward +25m</button>
+  </div>
 
-    <form id="timeForm" class="input-box">
-      <label>Timer awal: 
-        <input type="number" id="timerJam" min="0" placeholder="j"> j 
-        <input type="number" id="timerMenit" min="0" max="59" placeholder="m"> m
+  <div class="card" id="formCard">
+    <div class="app-icon" id="appIcon">📱</div>
+    <div class="app-name" id="appName">Aplikasi: -</div>
+    <p id="aksiText">Punish saat ini: <b id="punishText">0</b> menit</p>
+
+    <form id="timeForm">
+      <label>Timer awal:
+        <input type="number" id="timerJam" placeholder="j"> j
+        <input type="number" id="timerMenit" placeholder="m"> m
       </label><br>
-      <label>Sudah dipakai: 
-        <input type="number" id="pakaiJam" min="0" placeholder="j"> j 
-        <input type="number" id="pakaiMenit" min="0" max="59" placeholder="m"> m
+      <label>Sudah dipakai:
+        <input type="number" id="pakaiJam" placeholder="j"> j
+        <input type="number" id="pakaiMenit" placeholder="m"> m
       </label><br>
-      <input type="submit" value="Enter" style="margin-top:10px; padding:5px 15px; cursor:pointer;">
+      <input type="submit" value="Hitung">
     </form>
+
+    <div class="sisa-waktu" id="hasil">Total waktu baru: -</div>
   </div>
 
-  <div class="log">
-    <h3>Log Aktivitas</h3>
-    <ul id="log"></ul>
-  </div>
+  <div id="log"><b>📜 Log Aktivitas:</b></div>
 
   <script>
     const apps = [
-      {name:"Brave", icon:"🦁"}, 
-      {name:"Facebook", icon:"📘"}, 
-      {name:"Instagram", icon:"📸"}, 
-      {name:"TikTok", icon:"🎵"}, 
-      {name:"Dragon Nest", icon:"🐉"}, 
-      {name:"Mobile Legend", icon:"⚔️"}
+      { name: "Brave", icon: "🦁" },
+      { name: "TikTok", icon: "🎵" },
+      { name: "Instagram", icon: "📸" },
+      { name: "Facebook", icon: "📘" },
+      { name: "Mobile Legend", icon: "⚔️" }
     ];
 
+    let punish = 0;
+    let reward = 0;
     let currentApp = null;
-    let currentPunishment = 0;
+    let mode = ""; // "punish" atau "reward"
 
-    function pickApp(punishment) {
-      const randomApp = apps[Math.floor(Math.random() * apps.length)];
-      currentApp = randomApp.name;
-      currentPunishment = punishment;
+    function setPunish(menit) {
+      mode = "punish";
+      punish = menit;
+      currentApp = apps[Math.floor(Math.random() * apps.length)];
 
-      document.getElementById("appCard").style.display = "block";
-      document.querySelector(".app-icon").textContent = randomApp.icon;
-      document.getElementById("pickedApp").innerText = 
-        currentApp + " | Hukuman: -" + Math.abs(punishment) + "m";
-
-      document.getElementById("result").innerText = "Sisa waktu: -";
+      document.getElementById("punishText").innerText = menit;
+      document.getElementById("appIcon").textContent = currentApp.icon;
+      document.getElementById("appName").textContent = currentApp.name + " (Terkena hukuman)";
+      document.getElementById("aksiText").innerHTML = `Punish saat ini: <b id="punishText">${menit}</b> menit`;
+      document.getElementById("formCard").style.display = "block";
+      document.getElementById("timeForm").style.display = "block";
+      document.getElementById("hasil").innerText = "Total waktu baru: -";
     }
 
-    document.getElementById("timeForm").addEventListener("submit", function(e) {
-      e.preventDefault(); // cegah reload
+    function setReward(menit) {
+      mode = "reward";
+      reward = menit;
+      currentApp = apps[Math.floor(Math.random() * apps.length)];
 
-      if (!currentApp) return;
+      document.getElementById("appIcon").textContent = currentApp.icon;
+      document.getElementById("appName").textContent = currentApp.name + " (Mendapat reward)";
+      document.getElementById("aksiText").innerHTML = `Reward: <b>${menit}</b> menit 🎉`;
+      document.getElementById("formCard").style.display = "block";
+      document.getElementById("timeForm").style.display = "none";
+      document.getElementById("hasil").innerText = `🎉 ${currentApp.name} mendapat tambahan waktu +${menit} menit!`;
+
+      const waktu = new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
+      const logDiv = document.createElement("div");
+      logDiv.classList.add("log-entry");
+      logDiv.innerHTML = `[${waktu}] Reward +${reward}m → ${currentApp.name}`;
+      document.getElementById("log").prepend(logDiv);
+    }
+
+    document.getElementById("timeForm").addEventListener("submit", function (e) {
+      e.preventDefault();
 
       let timerJam = parseInt(document.getElementById("timerJam").value) || 0;
       let timerMenit = parseInt(document.getElementById("timerMenit").value) || 0;
       let pakaiJam = parseInt(document.getElementById("pakaiJam").value) || 0;
       let pakaiMenit = parseInt(document.getElementById("pakaiMenit").value) || 0;
 
-      let totalAwal = (timerJam * 60) + timerMenit;
-      let sudahPakai = (pakaiJam * 60) + pakaiMenit;
+      let totalAwal = timerJam * 60 + timerMenit;
+      let sudahPakai = pakaiJam * 60 + pakaiMenit;
+      let totalBaru = totalAwal - sudahPakai;
 
-      let sisa = totalAwal - sudahPakai + currentPunishment;
-      if (sisa < 0) sisa = 0;
+      if (mode === "punish") totalBaru += punish;
 
-      let jam = Math.floor(sisa / 60);
-      let menit = sisa % 60;
+      if (totalBaru < 0) totalBaru = 0;
 
-      // tampilkan hasil besar
-      document.getElementById("result").innerText = `Sisa waktu: ${jam}j ${menit}m`;
+      let jam = Math.floor(totalBaru / 60);
+      let menit = totalBaru % 60;
 
-      // tambahkan ke log
-      let li = document.createElement("li");
-      li.textContent = `${currentApp}: Timer ${timerJam}j ${timerMenit}m - Pakai ${pakaiJam}j ${pakaiMenit}m - Hukuman ${Math.abs(currentPunishment)}m → Sisa ${jam}j ${menit}m`;
-      document.getElementById("log").appendChild(li);
+      document.getElementById("hasil").innerText =
+        `${currentApp.name}: Total waktu baru ${jam} jam ${menit} menit`;
 
-      // reset input biar kosong lagi
+      const waktu = new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
+      const logDiv = document.createElement("div");
+      logDiv.classList.add("log-entry");
+      logDiv.innerHTML = `[${waktu}] Punish -${punish}m → ${currentApp.name} | Sisa: ${jam}j ${menit}m`;
+      document.getElementById("log").prepend(logDiv);
+
       document.getElementById("timerJam").value = "";
       document.getElementById("timerMenit").value = "";
       document.getElementById("pakaiJam").value = "";
