@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Perhitungan Hasil Panen Sawit</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #e8f5e9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      text-align: center;
+      max-width: 480px;
+      width: 100%;
+    }
+    h2 {
+      color: #2e7d32;
+      margin-bottom: 20px;
+    }
+    label {
+      font-size: 16px;
+      display: block;
+      margin-top: 12px;
+      margin-bottom: 5px;
+      text-align: left;
+    }
+    input, select {
+      padding: 10px;
+      width: 90%;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 5px;
+      text-align: center;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 16px;
+      line-height: 1.6;
+      background: #f1f8e9;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: left;
+      white-space: pre-line;
+    }
+    button {
+      margin-top: 20px;
+      padding: 12px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #43a047;
+      color: white;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #2e7d32;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Perhitungan Hasil Panen Sawit</h2>
+
+    <label for="panen">Jumlah Panen (kg):</label>
+    <input type="number" id="panen" placeholder="Masukkan jumlah panen">
+
+    <label for="harga">Harga Panen (Rp):</label>
+    <input type="number" id="harga" placeholder="Masukkan harga per kg">
+
+    <label for="potongan">Jenis Potongan:</label>
+    <select id="potongan">
+      <option value="0">Tidak Ada</option>
+      <option value="Pupuk">Pupuk</option>
+      <option value="Lain-lain">Lain-lain</option>
+    </select>
+
+    <label for="nominalPotongan">Nominal Potongan (Rp):</label>
+    <input type="number" id="nominalPotongan" placeholder="Masukkan nominal potongan">
+
+    <div class="result" id="result"></div>
+
+    <button onclick="copyResult()">📋 Copy Hasil</button>
+  </div>
+
+  <script>
+    function formatRupiah(angka) {
+      return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(angka);
+    }
+
+    function hitung() {
+      const panen = parseFloat(document.getElementById('panen').value) || 0;
+      const harga = parseFloat(document.getElementById('harga').value) || 0;
+      const jenisPotongan = document.getElementById('potongan').value;
+      const nominalPotongan = parseFloat(document.getElementById('nominalPotongan').value) || 0;
+
+      const gajiManen = panen * 200;
+      const totalPenjualan = panen * harga;
+      const totalPengeluaran = gajiManen + nominalPotongan; // total semua pengeluaran
+      const totalSetelahPotongan = totalPenjualan - totalPengeluaran;
+      const bagiHasil = totalSetelahPotongan / 2;
+
+      const today = new Date();
+      const tanggal = today.toLocaleDateString('id-ID');
+
+      let output =
+        `📅 Tanggal: ${tanggal}\n` +
+        `📌 Hasil Panen Sawit\n` +
+        `----------------------------------\n` +
+        `Jumlah Timbangan: ${panen} kg\n` +
+        `Harga Buah Sawit: ${formatRupiah(harga)}\n` +
+        `Total Penjualan: ${formatRupiah(totalPenjualan)}\n\n` +
+        `Gaji Tukang Manen = ${formatRupiah(gajiManen)}\n`;
+
+      if (jenisPotongan !== "0" && nominalPotongan > 0) {
+        output += `Potongan (${jenisPotongan}) = ${formatRupiah(nominalPotongan)}\n`;
+      }
+
+      output +=
+        `----------------------------------\n` +
+        `Total Pengeluaran = ${formatRupiah(totalPengeluaran)}\n` +
+        `Sisa Setelah Potongan = ${formatRupiah(totalSetelahPotongan)}\n` +
+        `----------------------------------\n` +
+        `Bagi Hasil = ${formatRupiah(bagiHasil)}\n`;
+
+      document.getElementById('result').innerText = output;
+    }
+
+    function copyResult() {
+      const text = document.getElementById('result').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        alert("✅ Hasil berhasil disalin!");
+      });
+    }
+
+    document.getElementById('panen').addEventListener('input', hitung);
+    document.getElementById('harga').addEventListener('input', hitung);
+    document.getElementById('potongan').addEventListener('change', hitung);
+    document.getElementById('nominalPotongan').addEventListener('input', hitung);
+  </script>
+</body>
+</html>
